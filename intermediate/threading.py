@@ -6,18 +6,18 @@ def square_number():
         i * i
         time.sleep(0.1)
 
+if __name__ == "__main__":
+    th = []
+    num_th= 10
 
-th = []
-num_th= 10
+    for i in range(num_th):
+        p = Thread(target=square_number)
+        Thread.append(p)
 
-for i in range(num_th):
-    p = Thread(target=square_number)
-    Thread.append(p)
+    for p in th:
+        p.start()
 
-for p in th:
-    p.start()
+    for p in th:
+        p.join()
 
-for p in th:
-    p.join()
-
-print("end main")
+    print("end main")
