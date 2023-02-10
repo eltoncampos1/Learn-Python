@@ -1,23 +1,26 @@
-from threading import Thread
+from threading import Thread, Lock
 import time
 
-def square_number():
-    for i in range(100):
-        i * i
-        time.sleep(0.1)
+db_value = 0
+
+def increase(lock):
+    global db_value
+    lock.acquire()
+    local_cp = db_value
+    local_cp += 1
+    time.sleep(0.1)
+    db_value = local_cp
+    lock.release()
 
 if __name__ == "__main__":
-    th = []
-    num_th= 10
+    l = Lock()
+    print('start value', db_value)
+    th_1 = Thread(target=increase, args=(l,))
+    th_2 = Thread(target=increase, args=(l,))
+    th_1.start()
+    th_2.start()
+    
+    th_1.join()
+    th_2.join()
 
-    for i in range(num_th):
-        p = Thread(target=square_number)
-        Thread.append(p)
-
-    for p in th:
-        p.start()
-
-    for p in th:
-        p.join()
-
-    print("end main")
+    print("end value", db_value)
